@@ -81,10 +81,15 @@ upload:
 	svn import "$(ARCHIVE_DIR)/$(EXPORT_WIN32)" "$(REPO_TAGS)/archives/$(EXPORT_WIN32)" \
 		-m "added released win32 installer for version $(VERSION)"
 
-test: check-style
+test: check-style check-yaml-flow
 
 check-style:
 	scripts/run_flake8 $(PYTHON_CHECK_STYLE_TARGETS)
+
+check-yaml-flow:
+	$(RM) test.ngc
+	python pycam.Flow.parser yaml_flow_working.yml
+	grep -q "Z" test.ngc
 
 pylint-strict:
 	pylint $(PYTHON_CHECK_STYLE_TARGETS)
